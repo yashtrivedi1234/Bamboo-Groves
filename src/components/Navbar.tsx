@@ -8,8 +8,8 @@ import logo from '../assets/logo.png';
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
-  { name: 'Corporate Events', path: '/portfolio' },
-  { name: 'Social Events', path: '/gallery' },
+  { name: 'Corporate Events', path: '/events/corporate' },
+  { name: 'Social Events', path: '/events/social' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -50,6 +50,17 @@ const Navbar: React.FC = () => {
       setIsOpen(false);
     }
   }, [hideOnHomeHero, isOpen]);
+
+  const isActiveLink = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    if (path === '/events/corporate') {
+      return location.pathname === '/events/corporate';
+    }
+    if (path === '/events/social') {
+      return location.pathname === '/events/social';
+    }
+    return location.pathname === path;
+  };
 
   return (
     <>
@@ -94,7 +105,7 @@ const Navbar: React.FC = () => {
                   to={link.path}
                   className={cn(
                     'heading text-xs lg:text-sm font-medium transition-colors hover:text-accent block whitespace-nowrap',
-                    location.pathname === link.path
+                    isActiveLink(link.path)
                       ? 'text-accent'
                       : 'text-white/70'
                   )}
@@ -156,7 +167,7 @@ const Navbar: React.FC = () => {
                     to={link.path}
                     className={cn(
                       'heading text-2xl sm:text-3xl font-bold transition-colors',
-                      location.pathname === link.path
+                      isActiveLink(link.path)
                         ? 'text-accent'
                         : 'text-white hover:text-accent'
                     )}
