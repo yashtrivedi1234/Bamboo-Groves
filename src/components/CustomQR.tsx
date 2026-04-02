@@ -28,8 +28,11 @@ export default function CustomQR({
   size = 260,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const uidRef = useRef(Math.random().toString(36).slice(2, 7));
 
   useEffect(() => {
+    const uid = uidRef.current;
+
     (async () => {
       const matrix = await QRCode.create(url, {
         errorCorrectionLevel: "H",
@@ -50,7 +53,8 @@ export default function CustomQR({
           const x = quietZone + col * cell + cell * 0.14;
           const y = quietZone + row * cell + cell * 0.14;
           const w = cell * 0.8;
-          dots += `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${w.toFixed(2)}" height="${w.toFixed(2)}" rx="${r.toFixed(2)}" fill="url(#dotgrad-${url.length})"/>`;
+          // Use uid directly — no regex replacement needed
+          dots += `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${w.toFixed(2)}" height="${w.toFixed(2)}" rx="${r.toFixed(2)}" fill="url(#dotgrad-${uid})"/>`;
         }
       }
 
@@ -60,7 +64,7 @@ export default function CustomQR({
           <g transform="translate(${quietZone + tx},${quietZone + ty})">
             <rect width="${s}" height="${s}" rx="${cell * 1.2}" fill="${FG}"/>
             <rect x="${cell}" y="${cell}" width="${cell * 5}" height="${cell * 5}" rx="${cell * 0.8}" fill="${BG}"/>
-            <rect x="${cell * 1.5}" y="${cell * 1.5}" width="${cell * 4}" height="${cell * 4}" rx="${cell * 0.6}" fill="url(#fpgrad-${url.length})"/>
+            <rect x="${cell * 1.5}" y="${cell * 1.5}" width="${cell * 4}" height="${cell * 4}" rx="${cell * 0.6}" fill="url(#fpgrad-${uid})"/>
             <rect x="${cell * 2.5}" y="${cell * 2.5}" width="${cell * 2}" height="${cell * 2}" rx="${cell * 0.3}" fill="${BG}"/>
           </g>`;
       };
@@ -68,9 +72,6 @@ export default function CustomQR({
       const logoSize = cell * 3.4;
       const logoX = size / 2 - logoSize / 2;
       const logoY = size / 2 - logoSize / 2;
-
-      // Unique gradient IDs per QR to avoid SVG ID conflicts when multiple are on the page
-      const uid = Math.random().toString(36).slice(2, 7);
 
       const logoInner = logoSrc
         ? `
@@ -114,10 +115,10 @@ export default function CustomQR({
           </defs>
           <rect width="${size}" height="${size}" fill="${BG}" rx="14"/>
           <g clip-path="url(#clip-${uid})">
-            ${dots.replace(/url\(#dotgrad-\d+\)/g, `url(#dotgrad-${uid})`).replace(/url\(#fpgrad-\d+\)/g, `url(#fpgrad-${uid})`)}
-            ${fp(0, 0).replace(/url\(#fpgrad-\d+\)/g, `url(#fpgrad-${uid})`)}
-            ${fp((N - 7) * cell, 0).replace(/url\(#fpgrad-\d+\)/g, `url(#fpgrad-${uid})`)}
-            ${fp(0, (N - 7) * cell).replace(/url\(#fpgrad-\d+\)/g, `url(#fpgrad-${uid})`)}
+            ${dots}
+            ${fp(0, 0)}
+            ${fp((N - 7) * cell, 0)}
+            ${fp(0, (N - 7) * cell)}
             ${logo}
             <rect x="${quietZone}" y="${quietZone}" width="${qrSize}" height="${cell * 2.2}" fill="url(#scangrad-${uid})" opacity="0.45">
               <animateTransform attributeName="transform" type="translate" from="0,0" to="0,${size}" dur="2.5s" repeatCount="indefinite"/>

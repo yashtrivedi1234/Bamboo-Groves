@@ -6,7 +6,6 @@ import CustomQR from '../components/CustomQR';
 import ContactModal from '../components/ContactModal';
 import corporateImage from '../assets/events/corporate.webp';
 import socialImage from '../assets/events/social.webp';
-import logo from '../assets/logo.png';
 
 const eventContent = {
   corporate: {
@@ -29,10 +28,20 @@ const eventContent = {
 
 type EventType = keyof typeof eventContent;
 
+const getResponsiveQrSize = () => {
+  if (typeof window === 'undefined') return 250;
+  if (window.innerWidth < 640) return 210;
+  if (window.innerHeight < 760) return 210;
+  if (window.innerHeight < 860) return 230;
+  if (window.innerWidth < 1280) return 250;
+  return 280;
+};
+
 const EventQrPage: React.FC = () => {
   const { eventType } = useParams<{ eventType: EventType }>();
   const [searchParams] = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [qrSize, setQrSize] = useState(getResponsiveQrSize);
 
   const content = eventType ? eventContent[eventType as EventType] : undefined;
 
@@ -41,6 +50,14 @@ const EventQrPage: React.FC = () => {
       setIsModalOpen(true);
     }
   }, [content, searchParams]);
+
+  useEffect(() => {
+    const handleResize = () => setQrSize(getResponsiveQrSize());
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   if (!content) {
     return (
@@ -63,50 +80,42 @@ const EventQrPage: React.FC = () => {
 
   return (
     <>
-      <section className="relative min-h-screen overflow-hidden bg-background text-white">
+      <section className="event-qr-shell">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-18"
+          className="event-qr-media"
           style={{ backgroundImage: `url('${content.image}')` }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.76),rgba(10,10,10,0.94)),radial-gradient(circle_at_top_left,rgba(136,171,50,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.07),transparent_28%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.04)_48%,transparent_100%)] opacity-50" />
+        <div className="event-qr-overlay" />
 
-        <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 pb-24 pt-32 text-center md:pt-36">
-          <motion.img
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            src={logo}
-            alt="Bamboo Groves"
-            className="mb-8 h-16 w-auto sm:h-20"
-          />
+        <div className="event-qr-content">
+          <div className="event-qr-text-stack">
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05 }}
+              className="event-qr-eyebrow"
+            >
+              {content.eyebrow}
+            </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
-            className="mb-4 text-sm uppercase tracking-[0.45em] text-accent/85"
-          >
-            {content.eyebrow}
-          </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="event-qr-title"
+            >
+              {content.title}
+            </motion.h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-display text-5xl leading-tight text-white sm:text-6xl"
-          >
-            {content.title}
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-6 max-w-2xl text-base leading-8 text-white/85 sm:text-lg"
-          >
-            {content.description}
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="event-qr-copy"
+            >
+              {content.description}
+            </motion.p>
+          </div>
 
           <motion.button
             initial={{ opacity: 0, scale: 0.92 }}
@@ -114,17 +123,17 @@ const EventQrPage: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={() => setIsModalOpen(true)}
             type="button"
-            className="group mt-12 rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-4 shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-transform duration-300 hover:scale-[1.02] hover:border-accent/30 hover:shadow-[0_0_30px_rgba(136,171,50,0.15),0_30px_120px_rgba(0,0,0,0.45)] focus:outline-none focus:ring-2 focus:ring-accent/70"
+            className="event-qr-card group"
           >
-            <div className="overflow-hidden rounded-[1.5rem] border border-accent/20 bg-[linear-gradient(145deg,rgba(255,255,255,0.98),rgba(255,255,255,0.93))] p-3 shadow-inner shadow-black/10">
-              <CustomQR url={qrUrl} logoSrc={logo} size={280} />
+            <div className="event-qr-frame">
+              <CustomQR url={qrUrl} size={qrSize} />
             </div>
-            <div className="flex items-center justify-center gap-3 px-4 pb-2 pt-5 text-sm font-medium uppercase tracking-[0.28em] text-white/90">
-              <ScanQrCode size={18} className="text-accent" />
+            <div className="event-qr-action">
+              <ScanQrCode size={18} className="event-qr-action-icon" />
               <span>Scan or tap to open</span>
               <ArrowUpRight
                 size={18}
-                className="text-accent transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                className="event-qr-action-icon"
               />
             </div>
           </motion.button>
