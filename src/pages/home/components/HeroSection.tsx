@@ -97,16 +97,29 @@ export const HeroSection: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      // FIX 1: Use `overflow-hidden` without relying on [contain] alone.
-      // `contain: strict` blocks both layout AND paint leaks from scaled/clipped children.
-      className="relative isolate h-screen w-full overflow-hidden bg-black"
-      style={{ contain: 'strict' }}
+      className="relative isolate h-screen w-full bg-black"
+      // KEY FIX: overflow-hidden on both axes + contain:strict ensures nothing
+      // escapes — scaled bg images, clip-path panels, and the WebGL canvas
+      // are all clipped to the section boundary. max-width prevents any
+      // child from widening the layout and triggering a scrollbar.
+      style={{
+        contain: 'strict',
+        overflow: 'hidden',
+        maxWidth: '100vw',
+      }}
       data-scroll-section
     >
       {/* Stars background */}
-      {/* FIX 2: Explicitly constrain the Canvas wrapper so WebGL never bleeds out */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <Canvas camera={{ position: [0, 0, 1] }}>
+      {/* Explicit width/height so the Canvas never reports a size wider than viewport */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{ width: '100%', height: '100%', overflow: 'hidden' }}
+      >
+        <Canvas
+          camera={{ position: [0, 0, 1] }}
+          // Prevent the canvas element itself from ever being wider than its container
+          style={{ width: '100% !important', height: '100% !important', display: 'block' }}
+        >
           <Suspense fallback={null}>
             <Stars />
           </Suspense>
@@ -130,18 +143,23 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* ── MOBILE CAROUSEL (hidden on md+) ── */}
-      {/* FIX 3: overflow-hidden here prevents scaled bg images from leaking horizontally */}
-      <div className="relative z-10 h-full w-full overflow-hidden md:hidden">
+      <div
+        className="relative z-10 h-full w-full md:hidden"
+        // overflow:hidden clips the scale-105 bg images; position:relative
+        // establishes the containing block so absolute children can't escape
+        style={{ overflow: 'hidden', position: 'relative' }}
+      >
         {carouselSlides.map((slide, i) => (
           <motion.div
             key={i}
-            className="absolute inset-0 cursor-pointer overflow-hidden"
+            className="absolute inset-0 cursor-pointer"
+            // overflow:hidden here clips the scaled bg div to the slide boundary
+            style={{ overflow: 'hidden' }}
             animate={{ opacity: i === carouselIndex ? 1 : 0 }}
             transition={{ duration: 0.8, ease: 'easeInOut' }}
-            style={{ opacity: i === 0 ? 1 : 0 }}
             onClick={() => navigateToEvent(i === 0 ? 'corporate' : 'social')}
           >
-            {/* Background image — scale is clipped by overflow-hidden on parent */}
+            {/* Background image — overflow:hidden on parent clips the scale */}
             <div
               className="absolute inset-0 scale-105 bg-cover bg-center"
               style={{ backgroundImage: `url('${slide.image}')` }}
@@ -192,21 +210,35 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* ── DESKTOP SPLIT (hidden below md) ── */}
-      {/* FIX 4: This wrapper clips both panels so clip-path edges never paint outside the section */}
-      <div className="relative z-10 hidden h-full w-full overflow-hidden md:block">
+      {/* overflow:hidden clips clip-path edges + scaled bg images at the wrapper level */}
+      <div
+        className="relative z-10 hidden h-full w-full md:block"
+        style={{ overflow: 'hidden' }}
+      >
         {/* Corporate / Left */}
         <motion.div
           style={{ clipPath: leftClipPath }}
           onMouseEnter={() => setHoveredSide('corporate')}
           onMouseLeave={() => setHoveredSide(null)}
           onClick={() => navigateToEvent('corporate')}
-          // FIX 5: overflow-hidden on each panel clips the scale-110 bg image to the panel bounds
-          className="group absolute inset-0 z-20 cursor-pointer overflow-hidden"
+          className="group absolute inset-0 z-20 cursor-pointer"
+          // overflow:hidden clips the scale-110 bg image to the clip-path region
+          // without letting it bleed into the layout
+          // NOTE: we use inline style instead of Tailwind class so it isn't
+          // accidentally purged or overridden.
+          // IMPORTANT: Do NOT add overflow:hidden directly on an element that
+          // also has clip-path via a motion value — React Three Fiber / Framer
+          // Motion applies clip-path as a style, and overflow:hidden + clip-path
+          // on the same element can cause a compositing layer that ignores the
+          // clip in some browsers. Instead, nest the overflow wrapper one level in.
         >
-          <motion.div
-            className="absolute inset-0 scale-105 bg-cover bg-center transition-transform duration-[1.5s] ease-out group-hover:scale-110"
-            style={{ y: backgroundY, backgroundImage: `url('${corporateImage}')` }}
-          />
+          {/* Inner wrapper carries overflow:hidden so the bg scale is clipped */}
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div
+              className="absolute inset-0 scale-105 bg-cover bg-center transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+              style={{ y: backgroundY, backgroundImage: `url('${corporateImage}')` }}
+            />
+          </div>
           <div className="absolute inset-0 bg-black/60 transition-colors duration-500 group-hover:bg-black/30" />
 
           <div className="relative z-30 flex h-full w-full flex-col justify-center p-8 md:w-1/2 md:p-24">
@@ -229,13 +261,15 @@ export const HeroSection: React.FC = () => {
           onMouseEnter={() => setHoveredSide('private')}
           onMouseLeave={() => setHoveredSide(null)}
           onClick={() => navigateToEvent('social')}
-          // FIX 5 (same): overflow-hidden clips the scaled bg image
-          className="group absolute inset-0 z-10 cursor-pointer overflow-hidden"
+          className="group absolute inset-0 z-10 cursor-pointer"
         >
-          <motion.div
-            className="absolute inset-0 scale-105 bg-cover bg-center transition-transform duration-[1.5s] ease-out group-hover:scale-110"
-            style={{ y: backgroundY, backgroundImage: `url('${socialImage}')` }}
-          />
+          {/* Inner wrapper carries overflow:hidden so the bg scale is clipped */}
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div
+              className="absolute inset-0 scale-105 bg-cover bg-center transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+              style={{ y: backgroundY, backgroundImage: `url('${socialImage}')` }}
+            />
+          </div>
           <div className="absolute inset-0 bg-black/60 transition-colors duration-500 group-hover:bg-black/30" />
 
           <div className="relative z-30 flex h-full w-full flex-col items-start justify-center p-8 text-left md:ml-auto md:w-1/2 md:items-end md:p-24 md:text-right">

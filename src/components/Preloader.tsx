@@ -19,19 +19,23 @@ const Preloader: React.FC = () => {
           Bamboo Groves
         </motion.h1>
       </div>
-      <motion.div
-        className="w-48 h-[1px] bg-white/20 mt-4 relative overflow-hidden"
-        initial={{ width: 0 }}
-        animate={{ width: 192 }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-      >
+
+      {/* Use a fixed-width container — never animates width so no layout shift */}
+      <div className="w-48 h-[1px] bg-white/20 mt-4 relative overflow-hidden">
+        {/* scaleX from 0→1 is GPU-composited and never causes horizontal overflow */}
+        <motion.div
+          className="absolute inset-0 bg-white/60 origin-left"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 1, ease: 'easeInOut' }}
+        />
         <motion.div
           className="absolute inset-0 bg-accent"
           initial={{ x: '-100%' }}
           animate={{ x: '100%' }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         />
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
