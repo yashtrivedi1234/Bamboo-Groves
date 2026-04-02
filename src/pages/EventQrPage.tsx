@@ -37,6 +37,20 @@ const getResponsiveQrSize = () => {
   return 280;
 };
 
+const getAppBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_APP_URL?.trim();
+
+  if (envUrl) {
+    return envUrl.replace(/\/+$/, '');
+  }
+
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+
+  return '';
+};
+
 const EventQrPage: React.FC = () => {
   const { eventType } = useParams<{ eventType: EventType }>();
   const [searchParams] = useSearchParams();
@@ -73,7 +87,7 @@ const EventQrPage: React.FC = () => {
     );
   }
 
-  const qrUrl = `${import.meta.env.VITE_APP_URL}/events/${eventType}?openModal=1`;
+  const qrUrl = `${getAppBaseUrl()}/events/${eventType}?openModal=1`;
 
   return (
     <>
