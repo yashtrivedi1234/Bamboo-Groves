@@ -73,10 +73,7 @@ const EventQrPage: React.FC = () => {
     );
   }
 
-  const qrUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/events/${eventType}?openModal=1`
-      : '';
+  const qrUrl = `${import.meta.env.VITE_APP_URL}/events/${eventType}?openModal=1`;
 
   return (
     <>
