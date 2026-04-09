@@ -12,12 +12,27 @@ const HeroSection: React.FC = () => {
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden border-b border-[#88ab32]/15 bg-[#0a0a0a] px-5 pt-20 sm:px-10">
+
+      {/* ── Background Image ── */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1920&q=80')",
+        }}
+      />
+
+      {/* ── Dark overlay for readability ── */}
+      <div className="pointer-events-none absolute inset-0 bg-[#0a0a0a]/72" />
+
+      {/* ── Grid + glow overlays ── */}
       <div className="pointer-events-none absolute inset-0 opacity-45">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(136,171,50,0.08)_1px,transparent_1px)] bg-[size:45px_45px]" />
         <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:45px_45px]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(136,171,50,0.15),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(255,255,255,0.1),transparent_38%)]" />
       </div>
 
+      {/* ── Main Content ── */}
       <div
         className={`relative z-10 mx-auto max-w-5xl text-center transition-all duration-1000 ${
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
@@ -50,6 +65,7 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
+      {/* ── Scroll Indicator ── */}
       <a
         href="#about"
         className="absolute bottom-8 left-1/2 flex -translate-x-1/2 animate-bounce flex-col items-center text-[10px] uppercase tracking-[0.22em] text-white/55 transition hover:text-[#a4c34f]"
