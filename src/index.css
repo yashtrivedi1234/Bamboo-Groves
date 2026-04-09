@@ -424,6 +424,16 @@ html.has-scroll-dragging {
   .perspective-2000 {
     perspective: 2000px;
   }
+
+  .marquee-track {
+    width: max-content;
+    will-change: transform;
+    animation: clients-marquee 28s linear infinite;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
 }
 
 @media (min-width: 768px) {
@@ -552,5 +562,15 @@ html.has-scroll-dragging {
   100% {
     top: calc(100% - 10px);
     opacity: 0;
+  }
+}
+
+@keyframes clients-marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
   }
 }

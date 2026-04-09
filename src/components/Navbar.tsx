@@ -8,6 +8,7 @@ import logo from '../assets/logo.png';
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
+  { name: 'Corporate Profile', path: '/corporate-profile' },
   { name: 'Corporate Events', path: '/events/corporate' },
   { name: 'Social Events', path: '/events/social' },
   { name: 'Contact', path: '/contact' },
