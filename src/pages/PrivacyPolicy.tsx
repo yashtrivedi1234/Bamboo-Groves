@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { companyContact } from '@/src/lib/companyContact';
 
 const PrivacyPolicy: React.FC = () => {
   const sections = [
@@ -38,7 +39,7 @@ const PrivacyPolicy: React.FC = () => {
     },
     {
       title: '6. Your Rights and Choices',
-      content: 'Depending on your location, you may have rights including: access to your personal information; correction of inaccurate data; deletion of your information; opt-out of marketing communications; data portability; and withdrawal of consent. To exercise these rights, please contact us at privacy@bamboogroves.com.'
+      content: `Depending on your location, you may have rights including: access to your personal information; correction of inaccurate data; deletion of your information; opt-out of marketing communications; data portability; and withdrawal of consent. To exercise these rights, please contact us at ${companyContact.email}.`
     },
     {
       title: '7. Cookies and Tracking Technologies',
@@ -54,7 +55,7 @@ const PrivacyPolicy: React.FC = () => {
     },
     {
       title: '10. Contact Us',
-      content: 'If you have questions about this Privacy Policy or our privacy practices, please contact us at: privacy@bamboogroves.com | +1 (310) 555-0123 | Bamboo Groves Events, Lucknow, Uttar Pradesh'
+      content: `If you have questions about this Privacy Policy or our privacy practices, please contact us at: ${companyContact.email} | ${companyContact.phoneCombined} | ${companyContact.addressInline} | ${companyContact.website}`
     }
   ];
 

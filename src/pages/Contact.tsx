@@ -1,46 +1,45 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Globe, Mail, MapPin, Phone, Send } from 'lucide-react';
+import { companyContact } from '@/src/lib/companyContact';
 
 const Contact: React.FC = () => {
   return (
-    <div className="pt-32 pb-20 px-6 md:px-12 bg-transparent">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-
-          {/* Info */}
+    <div className="bg-transparent px-6 pb-20 pt-32 md:px-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 gap-20 lg:grid-cols-2">
           <div>
-            {/* h1 global base style: Montserrat, uppercase, 800 weight, clamp size */}
             <h1 className="mb-2">
               Start Your <span className="text-accent">Event.</span>
             </h1>
 
-            {/* p global base style: Inter, 1.7 line-height, muted color */}
             <p className="mb-6 max-w-md">
-              Ready to create something extraordinary? Tell us about your event and let's start the planning process.
+              Ready to create something extraordinary? Tell us about your event and let&apos;s start
+              the planning process.
             </p>
 
             <div className="space-y-8">
               {[
-                { icon: <Mail size={24} />,  label: 'Email',  value: 'events@bamboogroves.com' },
-                { icon: <Phone size={24} />, label: 'Phone',  value: '+1 (555) 123-4567' },
-                { icon: <MapPin size={24} />, label: 'Studio', value: 'Lucknow, Uttar Pradesh' },
+                { icon: <Mail size={24} />, label: 'Email', value: companyContact.email },
+                { icon: <Phone size={24} />, label: 'Phone', value: companyContact.phoneCombined },
+                { icon: <MapPin size={24} />, label: 'Address', value: companyContact.addressMultiline },
+                { icon: <Globe size={24} />, label: 'Website', value: companyContact.website },
               ].map(({ icon, label, value }) => (
                 <div key={label} className="flex items-center gap-6">
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-accent">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 text-accent">
                     {icon}
                   </div>
                   <div>
-                    {/* section-label: accent color, uppercase, tracking — mb-0 to suppress default margin */}
                     <span className="section-label mb-0">{label}</span>
-                    <p className="text-white">{value}</p>
+                    <p className={`text-white ${label === 'Address' ? 'whitespace-pre-line' : ''}`}>
+                      {value}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: 50, rotateY: 10 }}
             animate={{ opacity: 1, x: 0, rotateY: 0 }}
@@ -51,7 +50,7 @@ const Contact: React.FC = () => {
               boxShadow: '0 40px 80px rgba(0,0,0,0.5)',
             }}
             transition={{ duration: 0.8 }}
-            className="bg-white/5 p-12 rounded-3xl border border-white/10 backdrop-blur-md"
+            className="rounded-3xl border border-white/10 bg-white/5 p-12 backdrop-blur-md"
             style={{ transformStyle: 'preserve-3d' }}
           >
             <form className="space-y-5" style={{ transform: 'translateZ(20px)' }}>
@@ -60,7 +59,7 @@ const Contact: React.FC = () => {
                 <input
                   type="text"
                   placeholder="John Doe"
-                  className="w-full bg-transparent border-b border-white/20 py-4 focus:border-accent outline-none transition-colors text-white"
+                  className="w-full border-b border-white/20 bg-transparent py-4 text-white outline-none transition-colors focus:border-accent"
                 />
               </div>
               <div className="space-y-2">
@@ -68,7 +67,7 @@ const Contact: React.FC = () => {
                 <input
                   type="email"
                   placeholder="john@example.com"
-                  className="w-full bg-transparent border-b border-white/20 py-4 focus:border-accent outline-none transition-colors text-white"
+                  className="w-full border-b border-white/20 bg-transparent py-4 text-white outline-none transition-colors focus:border-accent"
                 />
               </div>
               <div className="space-y-2">
@@ -76,15 +75,14 @@ const Contact: React.FC = () => {
                 <textarea
                   rows={4}
                   placeholder="Tell me about your project..."
-                  className="w-full bg-transparent border-b border-white/20 py-4 focus:border-accent outline-none transition-colors resize-none text-white"
+                  className="w-full resize-none border-b border-white/20 bg-transparent py-4 text-white outline-none transition-colors focus:border-accent"
                 />
               </div>
 
-              {/* heading utility: Montserrat, uppercase, tracking */}
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="heading w-full bg-accent text-white py-6 rounded-2xl font-bold flex items-center justify-center gap-3"
+                className="heading flex w-full items-center justify-center gap-3 rounded-2xl bg-accent py-6 font-bold text-white"
               >
                 Send Message <Send size={20} />
               </motion.button>

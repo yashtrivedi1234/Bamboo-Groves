@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, Users, DollarSign, Package, Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from 'lucide-react';
+import { Calendar, Users, DollarSign, Package, Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown, Globe } from 'lucide-react';
 import * as Yup from 'yup';
+import { companyContact } from '@/src/lib/companyContact';
 
 // ── Yup Validation Schema ──────────────────────────────────────────────────────
 const bookingSchema = Yup.object({
@@ -215,9 +216,10 @@ const BookEvent: React.FC = () => {
 
               <div className="mt-12 pt-12 border-t border-white/10 space-y-6">
                 {[
-                  { icon: <Mail size={18} />,  label: 'Email',  value: 'events@bamboo.com' },
-                  { icon: <Phone size={18} />, label: 'Phone',  value: '+1 (555) 123-4567' },
-                  { icon: <MapPin size={18} />, label: 'Studio', value: 'Lucknow, Uttar Pradesh' },
+                  { icon: <Mail size={18} />, label: 'Email', value: companyContact.email },
+                  { icon: <Phone size={18} />, label: 'Phone', value: companyContact.phoneCombined },
+                  { icon: <MapPin size={18} />, label: 'Address', value: companyContact.addressMultiline },
+                  { icon: <Globe size={18} />, label: 'Website', value: companyContact.website },
                 ].map(({ icon, label, value }) => (
                   <div key={label} className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-accent">
@@ -226,7 +228,7 @@ const BookEvent: React.FC = () => {
                     <div>
                       {/* section-label: accent color, uppercase, tracking — inline so mb-0 */}
                       <span className="section-label mb-0">{label}</span>
-                      <p className="text-white">{value}</p>
+                      <p className={`text-white ${label === 'Address' ? 'whitespace-pre-line' : ''}`}>{value}</p>
                     </div>
                   </div>
                 ))}

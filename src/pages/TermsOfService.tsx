@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { companyContact } from '@/src/lib/companyContact';
 
 const TermsOfService: React.FC = () => {
   const sections = [
@@ -70,7 +71,7 @@ const TermsOfService: React.FC = () => {
     },
     {
       title: '14. Contact Information',
-      content: 'If you have any questions about these Terms of Service, please contact us at: legal@bamboogroves.com | +1 (310) 555-0123 | Bamboo Groves Events, Lucknow, Uttar Pradesh'
+      content: `If you have any questions about these Terms of Service, please contact us at: ${companyContact.email} | ${companyContact.phoneCombined} | ${companyContact.addressInline} | ${companyContact.website}`
     }
   ];
 

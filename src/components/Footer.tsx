@@ -1,13 +1,26 @@
 import React from 'react';
+import { companyContact } from '@/src/lib/companyContact';
 import ccLogo from '../assets/cc-logo.png';
 
 const Footer: React.FC = () => {
   return (
     <footer className="border-t border-white/10 bg-black px-4 py-6 sm:px-6 md:px-12">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-        <p className="section-label mb-0 text-xs text-white/40">
-          © 2026 Bamboo Groves Events Group. All Rights Reserved.
-        </p>
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center sm:items-start sm:text-left md:flex-row md:items-center">
+        <div className="space-y-2">
+          <p className="section-label mb-0 text-xs text-white/40">
+            © 2026 Bamboo Groves Events Group. All Rights Reserved.
+          </p>
+          <p className="text-xs leading-relaxed text-white/70">
+            <span className="block sm:hidden">
+              Email: {companyContact.email} | Phone: {companyContact.phoneCombined}
+            </span>
+            <span className="block sm:hidden">Address: {companyContact.addressInline}</span>
+            <span className="hidden sm:inline">
+              Email: {companyContact.email} | Phone: {companyContact.phoneCombined} | Address:{' '}
+              {companyContact.addressInline}
+            </span>
+          </p>
+        </div>
 
         <a
           href="https://www.codecrafter.co.in"

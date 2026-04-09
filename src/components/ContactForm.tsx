@@ -42,7 +42,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           type="tel"
           value={phone}
           onChange={(e) => onPhoneChange(e.target.value)}
-          placeholder="+1 (555) 000-0000"
+          placeholder="+91 9648 720 272"
         />
 
         <motion.button
