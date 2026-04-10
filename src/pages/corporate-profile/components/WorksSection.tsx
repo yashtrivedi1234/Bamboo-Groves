@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { workEventGroups } from '../data';
 import RevealSection from './RevealSection';
 import SectionHeading from './SectionHeading';
@@ -54,6 +55,14 @@ const WorksSection: React.FC = () => (
             </div>
           </section>
         ))}
+      </div>
+      <div className="mt-10 flex justify-center">
+        <Link
+          to="/corporate-events"
+          className="inline-flex items-center justify-center rounded-full border border-[#88ab32] bg-[#88ab32] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#0a0a0a] transition duration-300 hover:-translate-y-0.5 hover:bg-[#9cc340]"
+        >
+          View All Events
+        </Link>
       </div>
     </div>
   </RevealSection>
