@@ -1,6 +1,5 @@
 import React from 'react';
-import { Building2, Images, MapPin, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Building2, Images, MapPin } from 'lucide-react';
 import { workEventGroups } from './corporate-profile/data';
 
 const CorporateEventPage: React.FC = () => {
@@ -15,14 +14,7 @@ const CorporateEventPage: React.FC = () => {
         <section className="overflow-hidden rounded-[32px] border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(136,171,50,0.18),transparent_30%),linear-gradient(135deg,#101709_0%,#0a0f07_55%,#070a05_100%)] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.28)] sm:p-8 lg:p-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
-              <Link
-                to="/corporate-profile"
-                className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#b8d56a] transition hover:text-[#d9ef99]"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Corporate Profile
-              </Link>
-              <p className="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-[#88ab32]">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#88ab32]">
                 Corporate Event Page
               </p>
               <h1 className="mt-4 max-w-2xl text-2xl font-bold tracking-[0.03em] text-white sm:text-3xl lg:text-4xl">
