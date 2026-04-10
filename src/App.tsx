@@ -23,6 +23,7 @@ import TermsOfService from './pages/TermsOfService';
 import EventQrPage from './pages/EventQrPage';
 import CorporateProfile from './pages/CorporateProfile';
 import CorporateEventPage from './pages/CorporateEventPage';
+import AllClients from './pages/corporate-profile/AllClients';
 
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -86,6 +87,7 @@ const AppLayout: React.FC = () => {
         <Route path="/portfolio" element={<PageWrapper><Portfolio /></PageWrapper>} />
         <Route path="/gallery" element={<PageWrapper><Gallery /></PageWrapper>} />
         <Route path="/corporate-profile" element={<PageWrapper><CorporateProfile /></PageWrapper>} />
+        <Route path="/all-clients" element={<PageWrapper><AllClients /></PageWrapper>} />
         <Route path="/corporate-events" element={<PageWrapper><CorporateEventPage /></PageWrapper>} />
         <Route path="/events/:eventType" element={<MinimalPageWrapper><EventQrPage /></MinimalPageWrapper>} />
         <Route path="/book-event" element={<PageWrapper><BookEvent /></PageWrapper>} />

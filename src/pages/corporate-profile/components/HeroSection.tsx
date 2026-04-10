@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
 import logo from '../../../assets/logo.png';
-import aboutImage from '../../../assets/events/about.webp';
+import aboutImage from '../../../assets/events/corporate.png';
 import corporateImage from '../../../assets/events/corporate.webp';
 
 const heroPanels = [

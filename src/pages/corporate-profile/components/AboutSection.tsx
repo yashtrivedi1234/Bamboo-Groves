@@ -1,5 +1,5 @@
 import React from 'react';
-import aboutBackground from '../../../assets/events/about.webp';
+import aboutBackground from '../../../assets/events/c1.png';
 import RevealSection from './RevealSection';
 import SectionHeading from './SectionHeading';
 

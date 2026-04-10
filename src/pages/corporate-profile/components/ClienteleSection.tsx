@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import clientLogo01 from '../../../assets/corporate-profile/Screenshot 2026-04-10 102422.png';
 import clientLogo02 from '../../../assets/corporate-profile/Screenshot 2026-04-10 102531.png';
 import clientLogo03 from '../../../assets/corporate-profile/Screenshot 2026-04-10 102604.png';
@@ -135,7 +136,16 @@ const ClienteleSection: React.FC = () => {
   return (
     <RevealSection id="clients" className="bg-[#0b0f08] px-5 py-20 sm:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading centered title="Our Esteemed Clients" />
+        <div className="flex items-center justify-between gap-4">
+          <SectionHeading centered title="Our Esteemed Clients" />
+          <Link
+            to="/all-clients"
+            className="whitespace-nowrap rounded-lg border border-white/20 bg-white/10 px-6 py-2 text-sm font-medium text-white transition-all hover:bg-white/20 hover:border-white/40 sm:px-8 sm:py-3 sm:text-base"
+          >
+            View All
+          </Link>
+        </div>
+
         <div className="marquee mt-12 overflow-hidden rounded-3xl border border-white/10 bg-[#0d1209]/90 p-4">
           <div className="marquee-track flex w-max items-center gap-5">
             {marqueeItems.map((logo, index) => (

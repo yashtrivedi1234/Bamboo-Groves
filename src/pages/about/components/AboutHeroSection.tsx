@@ -1,18 +1,19 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import aboutImage from '../../../assets/about.png';
 
 const studioHighlights = [
   {
     label: 'Signature Style',
-    value: 'Luxury storytelling shaped with calm, detail-first execution.',
+    value: 'Innovative, creative events remembered for all the right reasons.',
   },
   {
     label: 'Planning Lens',
-    value: 'Design, hospitality, guest flow, and production working together.',
+    value: 'Strategic planning, clear communication, and uncompromising quality.',
   },
   {
     label: 'Client Promise',
-    value: 'Experiences that feel personal, polished, and easy to enjoy.',
+    value: 'Tailored events that inspire, engage, and deliver measurable results.',
   },
 ];
 
@@ -31,30 +32,30 @@ const AboutHeroSection: React.FC = () => {
         <div className="grid grid-cols-1 items-start gap-20 md:grid-cols-2 md:items-stretch">
           <div className="overflow-hidden md:h-full">
             <img
-              src="https://picsum.photos/seed/event-planner/800/1000"
-              alt="Event Planner"
+              src={aboutImage}
+              alt="Bamboo Groves Corporate Events"
               className="h-full min-h-[540px] w-full object-cover"
-              referrerPolicy="no-referrer"
             />
           </div>
 
           <div className="flex h-full flex-col justify-between gap-10">
             <div className="space-y-8">
               <p className="font-serif italic leading-relaxed text-white/80">
-                "We don't just plan events; we design atmospheres that resonate and memories that endure."
+                "We don't just plan events — we create impactful experiences that inspire, engage, and deliver results."
               </p>
 
               <p>
-                Bamboo Groves Events was built on the idea that every celebration should carry a
-                clear feeling, a strong identity, and a smooth guest experience from start to finish.
-                Our team blends creative direction with hospitality thinking to shape moments that
-                feel elevated without losing warmth.
+                At Bamboo Groves Pvt. Ltd., we specialize in creating memorable events that connect
+                leading brands and organizations across India with their audiences. With over 7 years
+                of experience, our team of expert planners blends creative direction with flawless
+                execution to bring every vision to life.
               </p>
 
               <p>
-                From intimate social gatherings to high-impact corporate productions, we focus on
-                visual harmony, operational discipline, and thoughtful storytelling so every detail
-                supports the mood of the event rather than competing with it.
+                From conferences, exhibitions, and product launches to weddings, social gatherings,
+                and large-scale celebrations — our expertise covers a wide spectrum of event solutions.
+                We maximize budgets and timelines while ensuring every detail supports your objectives
+                and adds genuine value.
               </p>
             </div>
 
@@ -76,16 +77,16 @@ const AboutHeroSection: React.FC = () => {
                 <p className="text-white">Lucknow, Uttar Pradesh</p>
               </div>
               <div>
-                <span className="section-label">Events Produced</span>
-                <p className="text-white">500+</p>
+                <span className="section-label">Experience</span>
+                <p className="text-white">7+ Years</p>
               </div>
               <div>
-                <span className="section-label">Industry Reach</span>
-                <p className="text-white">Corporate, luxury, and private celebrations</p>
+                <span className="section-label">Event Spectrum</span>
+                <p className="text-white">Corporate, exhibitions, weddings & celebrations</p>
               </div>
               <div>
                 <span className="section-label">Approach</span>
-                <p className="text-white">Creative direction backed by precise logistics</p>
+                <p className="text-white">Creativity, precision, and measurable outcomes</p>
               </div>
             </div>
           </div>
