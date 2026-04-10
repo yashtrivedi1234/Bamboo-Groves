@@ -23,7 +23,7 @@ const AboutSection: React.FC = () => (
           {[
             { value: '500+', label: 'Events' },
             { value: '200+', label: 'Clients' },
-            { value: '15+', label: 'Years' },
+            { value: '7+', label: 'Years' },
           ].map((stat) => (
             <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <p className="text-2xl font-bold text-[#a4c34f]">{stat.value}</p>

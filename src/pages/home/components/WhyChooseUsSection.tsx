@@ -4,7 +4,7 @@ import { Star, Target, Users, Globe, Gem, Trophy } from 'lucide-react';
 
 const WhyChooseUsSection: React.FC = () => {
   const reasons = [
-    { icon: Star, title: 'Unmatched Expertise', desc: '15+ years in luxury event production with a portfolio spanning 500+ successful events worldwide.' },
+    { icon: Star, title: 'Unmatched Expertise', desc: '7+ years of experience in luxury event production with a portfolio spanning 500+ successful events worldwide.' },
     { icon: Target, title: 'Precision & Innovation', desc: 'We combine meticulous planning with cutting-edge technology and creative storytelling.' },
     { icon: Users, title: 'Dedicated Partnership', desc: 'Your vision becomes our mission. We provide white-glove service from conceptization to execution.' },
     { icon: Globe, title: 'Global Reach', desc: 'With partners in 24 countries, we seamlessly execute destination events at any scale.' },
