@@ -10,7 +10,10 @@ import {
   Trophy,
   Volume2,
 } from 'lucide-react';
-import type { ProcessStep, ServiceItem, WorkItem } from './types';
+import aboutEventImage from '../../assets/events/about.webp';
+import corporateEventImage from '../../assets/events/corporate.webp';
+import socialEventImage from '../../assets/events/social.webp';
+import type { CompanyEventGroup, ProcessStep, ServiceItem } from './types';
 
 export const serviceItems: ServiceItem[] = [
   { icon: Theater, title: 'Stage & Set Design', description: 'Creative stage concepts with custom decor.' },
@@ -117,35 +120,85 @@ export const clientCompanies = [
   'Bajaj Auto',
 ];
 
-export const workItems: WorkItem[] = [
+export const workEventGroups: CompanyEventGroup[] = [
   {
-    title: 'Annual Corporate Gala',
-    category: 'Corporate Events',
-    gradient: 'from-[#1e2b12] via-[#151f0d] to-[#0b1008]',
+    companyName: 'Tata Group',
+    events: [
+      {
+        id: 'tata-mumbai-annual-meet',
+        location: 'Mumbai',
+        image: corporateEventImage,
+        alt: 'Tata Group annual corporate event in Mumbai',
+      },
+      {
+        id: 'tata-pune-awards-night',
+        location: 'Pune',
+        image: aboutEventImage,
+        alt: 'Tata Group awards night in Pune',
+      },
+      {
+        id: 'tata-ahmedabad-leadership-summit',
+        location: 'Ahmedabad',
+        image: socialEventImage,
+        alt: 'Tata Group leadership summit in Ahmedabad',
+      },
+    ],
   },
   {
-    title: 'Product Launch 2024',
-    category: 'Product Launch',
-    gradient: 'from-[#243314] via-[#1b260f] to-[#0d1208]',
+    companyName: 'Infosys',
+    events: [
+      {
+        id: 'infosys-bengaluru-townhall',
+        location: 'Bengaluru',
+        image: socialEventImage,
+        alt: 'Infosys townhall event in Bengaluru',
+      },
+      {
+        id: 'infosys-hyderabad-product-launch',
+        location: 'Hyderabad',
+        image: corporateEventImage,
+        alt: 'Infosys product launch event in Hyderabad',
+      },
+    ],
   },
   {
-    title: 'Exhibition Stall - TechExpo',
-    category: 'Exhibition',
-    gradient: 'from-[#20301a] via-[#131d10] to-[#0a1009]',
+    companyName: 'Reliance Industries',
+    events: [
+      {
+        id: 'reliance-delhi-brand-showcase',
+        location: 'New Delhi',
+        image: aboutEventImage,
+        alt: 'Reliance Industries brand showcase in New Delhi',
+      },
+      {
+        id: 'reliance-mumbai-sales-conclave',
+        location: 'Mumbai',
+        image: corporateEventImage,
+        alt: 'Reliance Industries sales conclave in Mumbai',
+      },
+      {
+        id: 'reliance-jaipur-partner-meet',
+        location: 'Jaipur',
+        image: socialEventImage,
+        alt: 'Reliance Industries partner meet in Jaipur',
+      },
+    ],
   },
   {
-    title: 'LED Stage Production',
-    category: 'Stage Design',
-    gradient: 'from-[#23301d] via-[#182114] to-[#0d130b]',
-  },
-  {
-    title: 'Award Night Ceremony',
-    category: 'Awards',
-    gradient: 'from-[#2d3f1a] via-[#1f2c12] to-[#101708]',
-  },
-  {
-    title: 'Outdoor Hoarding Campaign',
-    category: 'Outdoor Publicity',
-    gradient: 'from-[#223224] via-[#17231a] to-[#0d150e]',
+    companyName: 'Mahindra & Mahindra',
+    events: [
+      {
+        id: 'mahindra-nagpur-dealer-event',
+        location: 'Nagpur',
+        image: corporateEventImage,
+        alt: 'Mahindra and Mahindra dealer event in Nagpur',
+      },
+      {
+        id: 'mahindra-indore-recognition-night',
+        location: 'Indore',
+        image: aboutEventImage,
+        alt: 'Mahindra and Mahindra recognition night in Indore',
+      },
+    ],
   },
 ];

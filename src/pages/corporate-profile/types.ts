@@ -12,8 +12,14 @@ export type ProcessStep = {
   description: string;
 };
 
-export type WorkItem = {
-  title: string;
-  category: string;
-  gradient: string;
+export type CompanyEvent = {
+  id: string;
+  location: string;
+  image: string;
+  alt?: string;
+};
+
+export type CompanyEventGroup = {
+  companyName: string;
+  events: CompanyEvent[];
 };
