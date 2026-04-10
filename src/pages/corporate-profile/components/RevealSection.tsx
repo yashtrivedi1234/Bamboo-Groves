@@ -4,11 +4,17 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 type RevealSectionProps = {
   id?: string;
   className?: string;
+  observerOptions?: IntersectionObserverInit;
   children: React.ReactNode;
 };
 
-const RevealSection: React.FC<RevealSectionProps> = ({ id, className = '', children }) => {
-  const { targetRef, isVisible } = useIntersectionObserver<HTMLElement>();
+const RevealSection: React.FC<RevealSectionProps> = ({
+  id,
+  className = '',
+  observerOptions,
+  children,
+}) => {
+  const { targetRef, isVisible } = useIntersectionObserver<HTMLElement>(observerOptions);
 
   return (
     <section

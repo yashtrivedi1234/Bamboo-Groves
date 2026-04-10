@@ -5,7 +5,11 @@ import RevealSection from './RevealSection';
 import SectionHeading from './SectionHeading';
 
 const WorksSection: React.FC = () => (
-  <RevealSection id="works" className="bg-[#0a0a0a] px-5 py-20 sm:px-10 lg:py-24">
+  <RevealSection
+    id="works"
+    observerOptions={{ threshold: 0.02, rootMargin: '0px 0px -2% 0px' }}
+    className="bg-[#0a0a0a] px-5 py-20 sm:px-10 lg:py-24"
+  >
     <div className="mx-auto max-w-6xl">
       <SectionHeading centered title="Works Done Recently at a Glance" />
       <div className="mt-12 space-y-8">

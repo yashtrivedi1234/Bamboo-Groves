@@ -10,6 +10,11 @@ export function useIntersectionObserver<T extends HTMLElement>(
     const node = targetRef.current;
     if (!node || isVisible) return;
 
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setIsVisible(true);
