@@ -84,16 +84,7 @@ const HeroSection: React.FC = () => {
         <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#88ab32]/12 blur-3xl" />
       </div>
 
-      <div className="absolute left-1/2 top-8 z-40 -translate-x-1/2">
-        <motion.div
-          initial={{ opacity: 0, y: -18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="rounded-full border border-white/12 bg-black/32 px-5 py-3 backdrop-blur-md"
-        >
-          <img src={logo} alt="Bamboo Groves" className="h-10 w-auto sm:h-12" />
-        </motion.div>
-      </div>
+     
 
       <div className="absolute inset-x-0 top-[21%] z-30 hidden md:block">
         <motion.div
