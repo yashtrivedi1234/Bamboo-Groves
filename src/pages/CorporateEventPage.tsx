@@ -25,8 +25,8 @@ const CorporateEventPage: React.FC = () => {
               <p className="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-[#88ab32]">
                 Corporate Event Page
               </p>
-              <h1 className="mt-4 max-w-2xl text-4xl font-bold tracking-[0.03em] text-white sm:text-5xl">
-                A single page for all our corporate event highlights.
+              <h1 className="mt-4 max-w-2xl text-2xl font-bold tracking-[0.03em] text-white sm:text-3xl lg:text-4xl">
+                Corporate Event Highlights
               </h1>
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/68 sm:text-base">
                 This page is ready for a large event library, with multiple events grouped under the same company and
