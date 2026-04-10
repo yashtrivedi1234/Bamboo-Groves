@@ -428,7 +428,7 @@ html.has-scroll-dragging {
   .marquee-track {
     width: max-content;
     will-change: transform;
-    animation: clients-marquee 28s linear infinite;
+    animation: clients-marquee 55s linear infinite;
   }
 
   .marquee:hover .marquee-track {
