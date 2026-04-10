@@ -20,11 +20,7 @@ const heroPanels = [
   },
 ] as const;
 
-const quickLinks = [
-  { label: 'What We Do', href: '#what-we-do' },
-  { label: 'How We Do It', href: '#how-we-do' },
-  { label: 'Our Services', href: '#services' },
-] as const;
+
 
 const HeroSection: React.FC = () => {
   const [activePanel, setActivePanel] = useState(0);
@@ -160,28 +156,7 @@ const HeroSection: React.FC = () => {
         </motion.div>
       </div>
 
-      <div className="absolute bottom-24 left-1/2 z-40 flex w-[calc(100%-2.5rem)] max-w-3xl -translate-x-1/2 flex-wrap items-center justify-center gap-3">
-        {quickLinks.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="rounded-full border border-white/14 bg-black/22 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70 backdrop-blur-md transition hover:border-[#88ab32]/50 hover:text-[#a4c34f]"
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
-
-      <div className="absolute bottom-40 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 md:hidden">
-        {heroPanels.map((panel, index) => (
-          <div
-            key={panel.id}
-            className={`h-1.5 rounded-full transition-all duration-500 ${
-              index === activePanel ? 'w-8 bg-[#a4c34f]' : 'w-2 bg-white/35'
-            }`}
-          />
-        ))}
-      </div>
+ 
 
       <a
         href="#about"
