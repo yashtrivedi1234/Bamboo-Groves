@@ -20,7 +20,7 @@ const WorksSection: React.FC = () => (
           >
             <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#88ab32]">Client Events</p>
+               
                 <h3 className="mt-3 normal-case text-2xl tracking-normal text-[#f5f5f5]">{group.companyName}</h3>
               </div>
               <span className="inline-flex w-fit rounded-full border border-[#88ab32]/30 bg-[#88ab32]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d6e8a1]">
@@ -47,13 +47,6 @@ const WorksSection: React.FC = () => (
                     </span>
                   </div>
 
-                  <div className="flex items-end justify-between gap-4 p-4">
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">Location</p>
-                      <h4 className="mt-2 normal-case text-base tracking-normal text-[#f5f5f5]">{event.location}</h4>
-                    </div>
-                    <p className="text-right text-xs leading-relaxed text-white/45">{group.companyName}</p>
-                  </div>
                 </article>
               ))}
             </div>
