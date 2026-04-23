@@ -128,6 +128,7 @@ export const workEventGroups: CompanyEventGroup[] = [
         id: 'tata-mumbai-annual-meet',
         location: 'Mumbai',
         image: corporateEventImage,
+        extraImages: [aboutEventImage, socialEventImage],
         alt: 'Tata Group annual corporate event in Mumbai',
       },
       {

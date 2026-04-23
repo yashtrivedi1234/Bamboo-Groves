@@ -1,8 +1,111 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Building2, Images, MapPin } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { workEventGroups } from "./corporate-profile/data";
 
+const getApiBaseUrl = () => {
+  const envUrl = import.meta.env.BACKEND_URL?.trim();
+
+  if (envUrl) {
+    return envUrl.replace(/\/+$/, "");
+  }
+
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+
+  return "";
+};
+
 const CorporateEventPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const [isValidating, setIsValidating] = useState(true);
+  const [isAccessGranted, setIsAccessGranted] = useState(false);
+  const [validationMessage, setValidationMessage] = useState("Validating access...");
+
+  useEffect(() => {
+    const requestId = searchParams.get("requestId")?.trim();
+    const portfolioIdParam = searchParams.get("portfolioId")?.trim();
+    const portfolioId = Number(portfolioIdParam);
+
+    if (!requestId || !portfolioIdParam || !Number.isInteger(portfolioId) || portfolioId <= 0) {
+      setIsAccessGranted(false);
+      setValidationMessage("Access validation parameters are missing.");
+      setIsValidating(false);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const validateAccess = async () => {
+      try {
+        const response = await fetch(
+          `${getApiBaseUrl()}/validate-access/${portfolioId}?requestId=${encodeURIComponent(requestId)}`,
+          {
+            method: "GET",
+            signal: controller.signal,
+          },
+        );
+
+        const responseBody = await response.json().catch(() => null);
+
+        if (!response.ok || responseBody?.success !== true) {
+          const message =
+            typeof responseBody?.message === "string"
+              ? responseBody.message
+              : "Access validation failed.";
+          setIsAccessGranted(false);
+          setValidationMessage(message);
+          return;
+        }
+
+        setIsAccessGranted(true);
+        setValidationMessage(
+          typeof responseBody?.message === "string"
+            ? responseBody.message
+            : "Access validated",
+        );
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+
+        setIsAccessGranted(false);
+        setValidationMessage("Unable to validate access right now.");
+      } finally {
+        setIsValidating(false);
+      }
+    };
+
+    validateAccess();
+
+    return () => controller.abort();
+  }, [searchParams]);
+
+  if (isValidating) {
+    return (
+      <main className="min-h-screen bg-[#070a05] px-5 pb-20 pt-28 text-[#f5f5f5] sm:px-8 sm:pt-32 lg:px-12">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-[#0d1209]/85 p-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#88ab32]">Access Check</p>
+          <h1 className="mt-4 text-2xl font-bold text-white">Validating your session...</h1>
+          <p className="mt-3 text-sm text-white/70">Please wait while we verify your access.</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!isAccessGranted) {
+    return (
+      <main className="min-h-screen bg-[#070a05] px-5 pb-20 pt-28 text-[#f5f5f5] sm:px-8 sm:pt-32 lg:px-12">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-red-400/30 bg-[#1a0e0e]/85 p-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-300">Access Denied</p>
+          <h1 className="mt-4 text-2xl font-bold text-white">Corporate events are locked.</h1>
+          <p className="mt-3 text-sm text-white/70">{validationMessage}</p>
+        </div>
+      </main>
+    );
+  }
+
   const totalEvents = workEventGroups.reduce(
     (count, group) => count + group.events.length,
     0,

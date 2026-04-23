@@ -98,10 +98,6 @@ export const HeroSection: React.FC = () => {
     <section
       ref={containerRef}
       className="relative isolate h-screen w-full bg-black"
-      // KEY FIX: overflow-hidden on both axes + contain:strict ensures nothing
-      // escapes — scaled bg images, clip-path panels, and the WebGL canvas
-      // are all clipped to the section boundary. max-width prevents any
-      // child from widening the layout and triggering a scrollbar.
       style={{
         contain: 'strict',
         overflow: 'hidden',
@@ -145,8 +141,6 @@ export const HeroSection: React.FC = () => {
       {/* ── MOBILE CAROUSEL (hidden on md+) ── */}
       <div
         className="relative z-10 h-full w-full md:hidden"
-        // overflow:hidden clips the scale-105 bg images; position:relative
-        // establishes the containing block so absolute children can't escape
         style={{ overflow: 'hidden', position: 'relative' }}
       >
         {carouselSlides.map((slide, i) => (
@@ -209,8 +203,7 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* ── DESKTOP SPLIT (hidden below md) ── */}
-      {/* overflow:hidden clips clip-path edges + scaled bg images at the wrapper level */}
+      {/* ── DESKTOP SPLIT ── */}
       <div
         className="relative z-10 hidden h-full w-full md:block"
         style={{ overflow: 'hidden' }}
@@ -222,15 +215,6 @@ export const HeroSection: React.FC = () => {
           onMouseLeave={() => setHoveredSide(null)}
           onClick={() => navigateToEvent('corporate')}
           className="group absolute inset-0 z-20 cursor-pointer"
-          // overflow:hidden clips the scale-110 bg image to the clip-path region
-          // without letting it bleed into the layout
-          // NOTE: we use inline style instead of Tailwind class so it isn't
-          // accidentally purged or overridden.
-          // IMPORTANT: Do NOT add overflow:hidden directly on an element that
-          // also has clip-path via a motion value — React Three Fiber / Framer
-          // Motion applies clip-path as a style, and overflow:hidden + clip-path
-          // on the same element can cause a compositing layer that ignores the
-          // clip in some browsers. Instead, nest the overflow wrapper one level in.
         >
           {/* Inner wrapper carries overflow:hidden so the bg scale is clipped */}
           <div className="absolute inset-0 overflow-hidden">

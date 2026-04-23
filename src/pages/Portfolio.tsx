@@ -209,6 +209,7 @@ const Portfolio: React.FC = () => {
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           projectTitle={selectedProject?.title || "Our Project"}
+          portfolioId={selectedProject?.id || 1}
         />
       </div>
     </>

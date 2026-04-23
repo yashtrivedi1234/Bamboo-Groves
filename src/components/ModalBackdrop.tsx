@@ -45,17 +45,17 @@ const ModalBackdrop: React.FC<ModalBackdropProps> = ({ isOpen, onClose, children
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative bg-black border border-accent rounded-2xl p-8 max-w-md w-full"
+        className="relative bg-black border border-accent rounded-2xl p-6 max-w-sm w-full"
       >
         {/* Close button */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={onClose}
-          className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
           aria-label="Close modal"
         >
-          <X size={24} />
+          <X size={20} />
         </motion.button>
 
         {/* Content */}

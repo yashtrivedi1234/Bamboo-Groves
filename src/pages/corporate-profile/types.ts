@@ -16,6 +16,7 @@ export type CompanyEvent = {
   id: string;
   location: string;
   image: string;
+  extraImages?: string[];
   alt?: string;
 };
 

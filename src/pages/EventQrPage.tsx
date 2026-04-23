@@ -15,6 +15,7 @@ const eventContent = {
       'Scan the code for premium corporate planning support, or tap the QR to share your details and let our team connect with you.',
     image: corporateImage,
     projectTitle: 'Corporate Event',
+    portfolioId: 1,
   },
   social: {
     title: 'Tap on the QR',
@@ -23,6 +24,7 @@ const eventContent = {
       'Scan the code for your social celebration flow, or tap the QR to open the enquiry modal and start planning your event with us.',
     image: socialImage,
     projectTitle: 'Social Event',
+    portfolioId: 2,
   },
 } as const;
 
@@ -155,6 +157,7 @@ const EventQrPage: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         projectTitle={content.projectTitle}
+        portfolioId={content.portfolioId}
       />
     </>
   );
