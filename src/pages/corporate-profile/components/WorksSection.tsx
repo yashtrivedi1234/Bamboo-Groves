@@ -42,9 +42,7 @@ const WorksSection: React.FC = () => (
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-                    <span className="absolute left-3 top-3 rounded-full bg-[#88ab32] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0a0a0a]">
-                      Event {index + 1}
-                    </span>
+                   
                   </div>
 
                 </article>
