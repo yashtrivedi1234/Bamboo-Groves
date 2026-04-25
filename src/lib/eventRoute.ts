@@ -29,5 +29,5 @@ export const getEventTypeFromPortfolioId = (portfolioId: number): EventType => {
 
 export const getPostVerificationRoute = (portfolioId: number) => {
   const eventType = getEventTypeFromPortfolioId(portfolioId);
-  return eventType === 'social' ? '/events/social' : '/corporate-events';
+  return eventType === 'social' ? '/events/social' : '/corporate-profile';
 };

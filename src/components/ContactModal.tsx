@@ -119,8 +119,30 @@ const ContactModal: React.FC<ContactModalProps> = ({
       }
 
       const receivedRequestId = responseBody?.requestId ?? responseBody?.accessRequestId ?? responseBody?.id;
-      if (receivedRequestId !== undefined && receivedRequestId !== null) {
-        setRequestId(String(receivedRequestId));
+      const resolvedRequestId =
+        receivedRequestId !== undefined && receivedRequestId !== null
+          ? String(receivedRequestId)
+          : undefined;
+
+      if (resolvedRequestId) {
+        setRequestId(resolvedRequestId);
+      }
+
+      const hasPermanentAccess =
+        responseBody?.hasPermanentAccess === true || responseBody?.isPermanent === true;
+
+      if (hasPermanentAccess) {
+        const fallbackQueryParams = new URLSearchParams({
+          portfolioId: String(portfolioId),
+          ...(resolvedRequestId ? { requestId: resolvedRequestId } : {}),
+        });
+
+        const fallbackRoute = `${getPostVerificationRoute(portfolioId)}?${fallbackQueryParams.toString()}`;
+
+        setIsLoading(false);
+        handleModalClose();
+        navigate(fallbackRoute);
+        return;
       }
 
       setIsLoading(false);
