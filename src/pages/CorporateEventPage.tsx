@@ -2,26 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Building2, Images, MapPin } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { workEventGroups } from "./corporate-profile/data";
-
-const getApiBaseUrl = () => {
-  const envUrl = import.meta.env.BACKEND_URL?.trim();
-
-  if (envUrl) {
-    return envUrl.replace(/\/+$/, "");
-  }
-
-  if (typeof window !== "undefined") {
-    return window.location.origin;
-  }
-
-  return "";
-};
+import { getAccessRequestApiUrl } from "../lib/accessRequestApi";
 
 const CorporateEventPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [isValidating, setIsValidating] = useState(true);
   const [isAccessGranted, setIsAccessGranted] = useState(false);
   const [validationMessage, setValidationMessage] = useState("Validating access...");
+  const [carouselIndexByGroup, setCarouselIndexByGroup] = useState<Record<string, number>>({});
+
+  const updateCarouselIndex = (groupName: string, imageCount: number, direction: "prev" | "next") => {
+    setCarouselIndexByGroup((prev) => {
+      const currentIndex = prev[groupName] ?? 0;
+      const nextIndex = direction === "next"
+        ? (currentIndex + 1) % imageCount
+        : (currentIndex - 1 + imageCount) % imageCount;
+
+      return {
+        ...prev,
+        [groupName]: nextIndex,
+      };
+    });
+  };
 
   useEffect(() => {
     const requestId = searchParams.get("requestId")?.trim();
@@ -40,7 +42,7 @@ const CorporateEventPage: React.FC = () => {
     const validateAccess = async () => {
       try {
         const response = await fetch(
-          `${getApiBaseUrl()}/validate-access/${portfolioId}?requestId=${encodeURIComponent(requestId)}`,
+          `${getAccessRequestApiUrl(`/validate-access/${portfolioId}`)}?requestId=${encodeURIComponent(requestId)}`,
           {
             method: "GET",
             signal: controller.signal,
@@ -49,11 +51,18 @@ const CorporateEventPage: React.FC = () => {
 
         const responseBody = await response.json().catch(() => null);
 
-        if (!response.ok || responseBody?.success !== true) {
+        const explicitDeny =
+          responseBody?.success === false ||
+          responseBody?.valid === false ||
+          responseBody?.isValid === false;
+
+        if (!response.ok || explicitDeny) {
           const message =
             typeof responseBody?.message === "string"
               ? responseBody.message
-              : "Access validation failed.";
+              : !response.ok
+                ? "Access validation failed."
+                : "Access was not granted.";
           setIsAccessGranted(false);
           setValidationMessage(message);
           return;
@@ -106,12 +115,24 @@ const CorporateEventPage: React.FC = () => {
     );
   }
 
-  const totalEvents = workEventGroups.reduce(
+  const requestedCompanyName =
+    searchParams.get("companyName")?.trim() ??
+    searchParams.get("company")?.trim() ??
+    "";
+  const normalizedCompanyName = requestedCompanyName.toLowerCase();
+
+  const filteredGroups = normalizedCompanyName
+    ? workEventGroups.filter((group) => group.companyName.toLowerCase() === normalizedCompanyName)
+    : workEventGroups;
+
+  const shouldShowSliderOnly = Boolean(normalizedCompanyName);
+
+  const totalEvents = filteredGroups.reduce(
     (count, group) => count + group.events.length,
     0,
   );
   const totalLocations = new Set(
-    workEventGroups.flatMap((group) =>
+    filteredGroups.flatMap((group) =>
       group.events.map((event) => event.location),
     ),
   ).size;
@@ -126,12 +147,12 @@ const CorporateEventPage: React.FC = () => {
                 Corporate Event Page
               </p>
               <h1 className="mt-4 max-w-2xl text-2xl font-bold tracking-[0.03em] text-white sm:text-3xl lg:text-4xl">
-                Corporate Event Highlights
+                {requestedCompanyName ? `${requestedCompanyName} Event Highlights` : "Corporate Event Highlights"}
               </h1>
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/68 sm:text-base">
-                This page is ready for a large event library, with multiple
-                events grouped under the same company and each event carrying
-                its own location and image.
+                {shouldShowSliderOnly
+                  ? "Showing only slider images for the selected company."
+                  : "This page is ready for a large event library, with multiple events grouped under the same company and each event carrying its own location and image."}
               </p>
             </div>
 
@@ -143,7 +164,7 @@ const CorporateEventPage: React.FC = () => {
                 <div className="mt-3 flex items-center gap-3">
                   <Building2 className="h-5 w-5 text-[#88ab32]" />
                   <span className="text-2xl font-bold text-white">
-                    {workEventGroups.length}
+                    {filteredGroups.length}
                   </span>
                 </div>
               </div>
@@ -176,7 +197,7 @@ const CorporateEventPage: React.FC = () => {
         </section>
 
         <section className="mt-10 space-y-8">
-          {workEventGroups.map((group) => (
+          {filteredGroups.map((group) => (
             <section
               key={group.companyName}
               className="rounded-[28px] border border-white/10 bg-[#0d1209]/85 p-5 shadow-[0_16px_40px_rgba(0,0,0,0.24)] sm:p-6"
@@ -192,30 +213,91 @@ const CorporateEventPage: React.FC = () => {
                 </span>
               </div>
 
-              <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {group.events.map((event, index) => (
-                  <article
-                    key={event.id}
-                    className="group overflow-hidden rounded-2xl border border-white/10 bg-[#10140c] transition duration-300 hover:-translate-y-1 hover:border-[#88ab32] hover:shadow-[0_18px_44px_rgba(136,171,50,0.16)]"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
+              {(() => {
+                const groupImages = group.events.flatMap((event) => [
+                  {
+                    src: event.image,
+                    alt: event.alt ?? `${group.companyName} event in ${event.location}`,
+                  },
+                  ...(event.extraImages ?? []).map((image) => ({
+                    src: image,
+                    alt: event.alt ?? `${group.companyName} event in ${event.location}`,
+                  })),
+                ]);
+
+                const hasCarousel = groupImages.length > 1;
+                const activeIndex = carouselIndexByGroup[group.companyName] ?? 0;
+                const activeImage = groupImages[activeIndex] ?? groupImages[0];
+
+                if (shouldShowSliderOnly && hasCarousel && activeImage) {
+                  return (
+                    <div className="relative mt-6 aspect-[16/7] overflow-hidden rounded-2xl border border-white/10">
                       <img
-                        src={event.image}
-                        alt={
-                          event.alt ??
-                          `${group.companyName} event in ${event.location}`
-                        }
+                        src={activeImage.src}
+                        alt={activeImage.alt}
                         loading="lazy"
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        className="h-full w-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-                      
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+                      <button
+                        type="button"
+                        aria-label="Previous image"
+                        onClick={() => updateCarouselIndex(group.companyName, groupImages.length, "prev")}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border border-white/40 bg-black/45 px-2.5 py-1.5 text-sm text-white transition hover:bg-black/70"
+                      >
+                        {"<"}
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Next image"
+                        onClick={() => updateCarouselIndex(group.companyName, groupImages.length, "next")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-white/40 bg-black/45 px-2.5 py-1.5 text-sm text-white transition hover:bg-black/70"
+                      >
+                        {">"}
+                      </button>
+
+                      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                        {groupImages.map((_, imageIndex) => (
+                          <span
+                            key={`${group.companyName}-${imageIndex}`}
+                            className={`h-1.5 w-1.5 rounded-full ${imageIndex === activeIndex ? "bg-accent" : "bg-white/45"}`}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </article>
-                ))}
-              </div>
+                  );
+                }
+
+                return (
+                  <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {group.events.map((event) => (
+                      <article
+                        key={event.id}
+                        className="group overflow-hidden rounded-2xl border border-white/10 bg-[#10140c] transition duration-300 hover:-translate-y-1 hover:border-[#88ab32] hover:shadow-[0_18px_44px_rgba(136,171,50,0.16)]"
+                      >
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                          <img
+                            src={event.image}
+                            alt={event.alt ?? `${group.companyName} event in ${event.location}`}
+                            loading="lazy"
+                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                );
+              })()}
             </section>
           ))}
+
+          {requestedCompanyName && filteredGroups.length === 0 && (
+            <section className="rounded-[28px] border border-red-400/25 bg-[#1a0e0e]/85 p-6 text-center">
+              <p className="text-sm text-red-200">No event images found for company: {requestedCompanyName}</p>
+            </section>
+          )}
         </section>
       </div>
     </main>

@@ -15,7 +15,7 @@ const eventContent = {
       'Scan the code for premium corporate planning support, or tap the QR to share your details and let our team connect with you.',
     image: corporateImage,
     projectTitle: 'Corporate Event',
-    portfolioId: 1,
+    portfolioId: 27,
   },
   social: {
     title: 'Tap on the QR',
@@ -40,17 +40,13 @@ const getResponsiveQrSize = () => {
 };
 
 const getAppBaseUrl = () => {
-  const envUrl = import.meta.env.VITE_APP_URL?.trim();
+  const envUrl = import.meta.env.VITE_APP_URL?.trim() || import.meta.env.APP_URL?.trim();
 
   if (envUrl) {
     return envUrl.replace(/\/+$/, '');
   }
 
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-
-  return '';
+  throw new Error('Missing app base URL. Set VITE_APP_URL or APP_URL in .env.');
 };
 
 const EventQrPage: React.FC = () => {

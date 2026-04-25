@@ -37,6 +37,16 @@ const projects = [
   },
 ];
 
+const getAppBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_APP_URL?.trim() || import.meta.env.APP_URL?.trim();
+
+  if (envUrl) {
+    return envUrl.replace(/\/+$/, "");
+  }
+
+  throw new Error("Missing app base URL. Set VITE_APP_URL or APP_URL in .env.");
+};
+
 const Portfolio: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const [modalOpen, setModalOpen] = useState(false);
@@ -88,6 +98,12 @@ const Portfolio: React.FC = () => {
       ? projects
       : projects.filter((p) => p.category === filter);
 
+  const selectedApiPortfolioId = selectedProject
+    ? selectedProject.category === "Social"
+      ? 2
+      : 27
+    : 27;
+
   return (
     <>
       <div className="mx-auto mt-4 max-w-7xl px-4 py-16 sm:px-6 sm:py-20 md:mt-6 lg:px-8">
@@ -121,9 +137,7 @@ const Portfolio: React.FC = () => {
         >
           <AnimatePresence>
             {filteredProjects.map((project) => {
-              const qrUrl = `${
-                import.meta.env.VITE_APP_URL
-              }/portfolio?project=${project.id}`;
+              const qrUrl = `${getAppBaseUrl()}/portfolio?project=${project.id}`;
 
               return (
                 <motion.div
@@ -209,7 +223,7 @@ const Portfolio: React.FC = () => {
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           projectTitle={selectedProject?.title || "Our Project"}
-          portfolioId={selectedProject?.id || 1}
+          portfolioId={selectedApiPortfolioId}
         />
       </div>
     </>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModalBackdrop from './ModalBackdrop';
 import ContactForm from './ContactForm';
+import { getAccessRequestApiUrl } from '../lib/accessRequestApi';
+import { getPostVerificationRoute } from '../lib/eventRoute';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -9,20 +11,6 @@ interface ContactModalProps {
   projectTitle: string;
   portfolioId?: number;
 }
-
-const getApiBaseUrl = () => {
-  const envUrl = import.meta.env.BACKEND_URL?.trim();
-
-  if (envUrl) {
-    return envUrl.replace(/\/+$/, '');
-  }
-
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-
-  return '';
-};
 
 const ContactModal: React.FC<ContactModalProps> = ({
   isOpen,
@@ -95,7 +83,7 @@ const ContactModal: React.FC<ContactModalProps> = ({
       name: trimmedName,
       email: trimmedEmail,
       phoneNumber: normalizedPhone,
-      notes: trimmedNotes || undefined,
+      notes: trimmedNotes,
     };
 
     // Log to console
@@ -111,10 +99,11 @@ const ContactModal: React.FC<ContactModalProps> = ({
     console.log(`   Time: ${new Date().toLocaleString()}`);
 
     try {
-      const response = await fetch(`${getApiBaseUrl()}/submit-request`, {
+      const response = await fetch(getAccessRequestApiUrl('/submit-request'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify(data),
       });
@@ -148,18 +137,19 @@ const ContactModal: React.FC<ContactModalProps> = ({
 
     const normalizedCode = accessCode.trim();
 
-    if (!/^\d{6}$/.test(normalizedCode)) {
-      alert('Please enter a valid 6-digit OTP.');
+    if (normalizedCode.length !== 6) {
+      alert('Please enter a valid 6-character OTP.');
       return;
     }
 
     setIsVerifying(true);
 
     try {
-      const response = await fetch(`${getApiBaseUrl()}/verify-code`, {
+      const response = await fetch(getAccessRequestApiUrl('/verify-code'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({ accessCode: normalizedCode }),
       });
@@ -190,7 +180,7 @@ const ContactModal: React.FC<ContactModalProps> = ({
         portfolioId: String(portfolioId),
         requestId: String(resolvedRequestId),
       });
-      navigate(`/corporate-events?${queryParams.toString()}`);
+      navigate(`${getPostVerificationRoute(portfolioId)}?${queryParams.toString()}`);
     } catch (error) {
       setIsVerifying(false);
       console.error('❌ OTP verification failed:', error);
@@ -218,21 +208,20 @@ const ContactModal: React.FC<ContactModalProps> = ({
         <>
           <h2 className="h2 font-display font-bold mb-1 text-accent">Verify OTP</h2>
           <p className="text-white/60 mb-5 text-sm leading-relaxed">
-            OTP has been sent. Enter your 6-digit OTP to continue to the corporate event page.
+            OTP has been sent. Enter your 6-character OTP to continue to the event page.
           </p>
 
           <form onSubmit={handlePinVerify} className="space-y-4">
             <div>
               <label className="block text-white mb-1.5 text-xs font-semibold uppercase tracking-widest">
-                6-digit OTP
+                OTP
               </label>
               <input
                 type="text"
                 value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                inputMode="numeric"
+                onChange={(e) => setAccessCode(e.target.value.slice(0, 6))}
                 autoComplete="one-time-code"
-                placeholder="123456"
+                placeholder="ABC123"
                 maxLength={6}
                 required
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-accent transition-colors tracking-[0.4em]"
