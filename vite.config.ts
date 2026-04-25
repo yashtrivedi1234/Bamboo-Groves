@@ -6,7 +6,12 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   const rawBackendUrl =
-    env.VITE_ACCESS_REQUEST_API_BASE || env.VITE_BACKEND_URL || env.BACKEND_URL;
+    env.VITE_ACCESS_REQUEST_API_BASE ||
+    env.VITE_BACKEND_URL ||
+    env.BACKEND_URL ||
+    env.VITE_BASE_URL ||
+    env.VITE_APP_URL ||
+    env.APP_URL;
 
   const resolveProxyTarget = (rawUrl?: string) => {
     if (!rawUrl) {
@@ -39,10 +44,18 @@ export default defineConfig(({mode}) => {
       hmr: process.env.DISABLE_HMR !== 'true',
       proxy: backendProxyTarget
         ? {
-            '/api': {
+            '/api/accessrequest': {
               target: backendProxyTarget,
               changeOrigin: true,
-              secure: true,
+              secure: false,
+              headers: {
+                'ngrok-skip-browser-warning': 'true',
+              },
+            },
+            '/uploads': {
+              target: backendProxyTarget,
+              changeOrigin: true,
+              secure: false,
               headers: {
                 'ngrok-skip-browser-warning': 'true',
               },

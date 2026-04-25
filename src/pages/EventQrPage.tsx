@@ -46,7 +46,11 @@ const getAppBaseUrl = () => {
     return envUrl.replace(/\/+$/, '');
   }
 
-  throw new Error('Missing app base URL. Set VITE_APP_URL or APP_URL in .env.');
+  if (typeof window !== 'undefined' && window.location.origin) {
+    return window.location.origin.replace(/\/+$/, '');
+  }
+
+  return '';
 };
 
 const EventQrPage: React.FC = () => {
