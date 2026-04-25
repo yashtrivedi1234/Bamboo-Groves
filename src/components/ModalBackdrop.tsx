@@ -45,7 +45,7 @@ const ModalBackdrop: React.FC<ModalBackdropProps> = ({ isOpen, onClose, children
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative bg-black border border-accent rounded-2xl p-6 max-w-sm w-full"
+        className="relative bg-black border border-accent rounded-2xl p-6 w-full max-w-sm md:max-w-2xl"
       >
         {/* Close button */}
         <motion.button

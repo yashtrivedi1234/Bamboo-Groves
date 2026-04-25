@@ -37,41 +37,45 @@ const ContactForm: React.FC<ContactFormProps> = ({
       </p>
 
       <form onSubmit={onSubmit} className="space-y-4">
-        <FormInput
-          label="Full Name"
-          type="text"
-          value={name}
-          onChange={(e) => onNameChange(e.target.value)}
-          placeholder="Your name"
-        />
-
-        <FormInput
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-          placeholder="you@example.com"
-        />
-
-        <FormInput
-          label="Phone Number"
-          type="tel"
-          value={phone}
-          onChange={(e) => onPhoneChange(e.target.value)}
-          placeholder="+919648720272"
-        />
-
-        <div>
-          <label className="block text-white mb-1.5 text-xs font-semibold uppercase tracking-widest">
-            Notes
-          </label>
-          <textarea
-            value={notes}
-            onChange={(e) => onNotesChange(e.target.value)}
-            placeholder="Tell us a bit about your requirement"
-            rows={3}
-            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-accent transition-colors resize-none"
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormInput
+            label="Full Name"
+            type="text"
+            value={name}
+            onChange={(e) => onNameChange(e.target.value)}
+            placeholder="Your name"
           />
+
+          <FormInput
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => onEmailChange(e.target.value)}
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormInput
+            label="Phone Number"
+            type="tel"
+            value={phone}
+            onChange={(e) => onPhoneChange(e.target.value)}
+            placeholder="+919648720272"
+          />
+
+          <div>
+            <label className="block text-white mb-1.5 text-xs font-semibold uppercase tracking-widest">
+              Notes
+            </label>
+            <textarea
+              value={notes}
+              onChange={(e) => onNotesChange(e.target.value)}
+              placeholder="Tell us a bit about your requirement"
+              rows={2}
+              className="w-full min-h-11 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-accent transition-colors resize-y"
+            />
+          </div>
         </div>
 
         <motion.button
