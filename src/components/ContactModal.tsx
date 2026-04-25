@@ -59,6 +59,8 @@ const ContactModal: React.FC<ContactModalProps> = ({
     const trimmedEmail = email.trim();
     const normalizedPhone = phone.trim().replace(/[\s()-]/g, '');
     const trimmedNotes = notes.trim();
+    const fullNameRegex = /^[A-Za-z]+(?:\s+[A-Za-z]+)*$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const e164PhoneRegex = /^\+[1-9]\d{1,14}$/;
 
     if (!Number.isInteger(portfolioId) || portfolioId <= 0) {
@@ -68,6 +70,16 @@ const ContactModal: React.FC<ContactModalProps> = ({
 
     if (!trimmedName || !trimmedEmail || !normalizedPhone) {
       alert('Please fill in all fields');
+      return;
+    }
+
+    if (!fullNameRegex.test(trimmedName)) {
+      alert('Full Name can contain letters and spaces only.');
+      return;
+    }
+
+    if (!emailRegex.test(trimmedEmail)) {
+      alert('Please enter a valid email address.');
       return;
     }
 

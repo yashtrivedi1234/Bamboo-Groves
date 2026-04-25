@@ -29,6 +29,23 @@ const ContactForm: React.FC<ContactFormProps> = ({
   onSubmit,
   isLoading = false
 }) => {
+  const handleNameInput = (rawValue: string) => {
+    const sanitizedValue = rawValue.replace(/[^A-Za-z\s]/g, '').replace(/\s{2,}/g, ' ');
+    onNameChange(sanitizedValue);
+  };
+
+  const handleEmailInput = (rawValue: string) => {
+    const sanitizedValue = rawValue.replace(/[^A-Za-z0-9@._%+-]/g, '');
+    onEmailChange(sanitizedValue);
+  };
+
+  const handlePhoneInput = (rawValue: string) => {
+    const sanitizedValue = rawValue
+      .replace(/[^\d+]/g, '')
+      .replace(/(?!^)\+/g, '');
+    onPhoneChange(sanitizedValue);
+  };
+
   return (
     <>
       <h2 className="h2 font-display font-bold mb-1 text-accent">Get in Touch</h2>
@@ -42,7 +59,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             label="Full Name"
             type="text"
             value={name}
-            onChange={(e) => onNameChange(e.target.value)}
+            onChange={(e) => handleNameInput(e.target.value)}
             placeholder="Your name"
           />
 
@@ -50,7 +67,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             label="Email"
             type="email"
             value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
+            onChange={(e) => handleEmailInput(e.target.value)}
             placeholder="you@example.com"
           />
         </div>
@@ -60,7 +77,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             label="Phone Number"
             type="tel"
             value={phone}
-            onChange={(e) => onPhoneChange(e.target.value)}
+            onChange={(e) => handlePhoneInput(e.target.value)}
             placeholder="+919648720272"
           />
 
